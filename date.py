@@ -51,19 +51,33 @@ class Date(object):
     def tomorrow(self):
         ''' Changes the calling object to represent one calendar day after the date it originally represented.'''
         if self.day + 1 > DAYS_IN_MONTH[self.month]:
-            self.day = 1
             # Month will change
             if self.month + 1 == 13:
                 # Year will change
                 self.year += 1
-            next_m = self.month + 1
-            self.month = next_m if next_m < 13 else 1
+                self.month = 1
+                self.day = 1
+            elif self.month == 2 and self.day == 28 and self.isLeapYear():
+                self.day = 29
+            else:
+                self.month += 1
+                self.day = 1
         else:
             self.day += 1
 
     def yesterday(self):
         ''' Changes the calling object to represent one calendar day before the date it originally represented.'''
-        pass
+        if self.day - 1 < 1:
+            # Month changes
+            if self.month - 1 < 1:
+                # Year changes
+                self.year -= 1
+                self.month = 12
+            else:
+                self.month -= 1
+            self.day = 29 if self.month == 2 and self.isLeapYear() else DAYS_IN_MONTH[self.month]
+        else:
+            self.day -= 1            
 
     def addNDays(self, N):
         ''' Adds N days to the calling object.'''
@@ -79,19 +93,41 @@ class Date(object):
             self.yesterday()
         print(self)
     
-    def isBefore(self, d2):
+    def isBefore(self, d):
         ''' Returns true if the calling object is a calendar date before a given date object. False otherwise.'''
-        pass
+        if self.year < d.year:
+            return True
+        elif self.year == d.year:
+            if self.month < d.month or (self.month == d.month and self.day < d.day):
+                return True
+        else:
+            return False
 
-    def isAfter(self, d2):
+
+    def isAfter(self, d):
         ''' Returns true if the calling obejct is a calendar date after a given date object. False otherwise.'''
-        return not self.isBefore(d2)
+        return not self.isBefore(d) and not self.equals(d)
     
-    def diff(self, d2):
+    def diff(self, d):
         ''' Returns an integer number of days between the calling object and a given object. '''
-        pass
+        if self.equals(d):
+            return 0
+        sign = 1
+        if self.isBefore(d):
+            sign = -1
+        d_copy = d.copy()
+        count = 0
+        while not self.equals(d_copy):
+            if sign == 1:
+                d_copy.tomorrow()
+            else:
+                d_copy.yesterday()
+            count += sign
+        return count
 
     def dow(self):
         ''' Returns the day of the week of the calling obeject as a string.'''
-        pass
-    
+        DOW = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+        ref = Date(11, 25, 2019)
+        diff = self.diff(ref)
+        return DOW[diff % 7]
