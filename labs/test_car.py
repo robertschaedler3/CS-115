@@ -7,8 +7,9 @@ CS115 - Car Test Script
 '''
 import unittest
 
-from car import Car
-from car import HybridCar
+from lab11 import Car
+from lab11 import HybridCar
+
 
 class Test(unittest.TestCase):
 
@@ -22,7 +23,8 @@ class Test(unittest.TestCase):
         self.assertAlmostEqual(c.mpg, 22.5)
         c.tank_capacity = 19.3
         self.assertAlmostEqual(c.tank_capacity, 19.3)
-        self.assertEqual(str(c), 'Honda Accord, MPG: 22.5, tank capacity: 19.3')
+        self.assertEqual(
+            str(c), 'Honda Accord, MPG: 22.5, tank capacity: 19.3')
 
     def test02(self):
         c = Car('Honda', 'Civic', 29.5, 13)
@@ -45,7 +47,8 @@ class Test(unittest.TestCase):
         hc.tank_capacity = 9.1
         self.assertAlmostEqual(hc.mpg, 48)
         self.assertAlmostEqual(hc.tank_capacity, 9.1)
-        self.assertEqual(str(hc), 'Toyota Prius, MPG: 48, tank capacity: 9.1, battery kWh: 4.4, miles/kWh: 25.8')
+        self.assertEqual(str(
+            hc), 'Toyota Prius, MPG: 48, tank capacity: 9.1, battery kWh: 4.4, miles/kWh: 25.8')
 
     def test04(self):
         hc = HybridCar('Toyota', 'Prius', 51.2, 7.8, 4.4, 25.8)
@@ -53,7 +56,9 @@ class Test(unittest.TestCase):
         self.assertTrue(isinstance(hc, HybridCar))
         self.assertAlmostEqual(hc.get_battery_range(), 113.52)
         self.assertAlmostEqual(hc.get_total_range(), 512.88)
-        self.assertEqual(str(hc), 'Toyota Prius, MPG: 51.2, tank capacity: 7.8, battery kWh: 4.4, miles/kWh: 25.8')
+        self.assertEqual(str(
+            hc), 'Toyota Prius, MPG: 51.2, tank capacity: 7.8, battery kWh: 4.4, miles/kWh: 25.8')
+
 
 if __name__ == '__main__':
     unittest.main()
